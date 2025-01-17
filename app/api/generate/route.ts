@@ -2,7 +2,15 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
     try {
-        const { prompt, message, temperature } = await request.json();
+        const { prompt, message, temperature, password } = await request.json();
+
+        // 验证密码
+        if (password !== process.env.ACCESS_PASSWORD) {
+            return NextResponse.json(
+                { error: '未授权访问' },
+                { status: 401 }
+            );
+        }
 
         const response = await fetch(`${process.env.OPENAI_BASE_URL}/chat/completions`, {
             method: 'POST',

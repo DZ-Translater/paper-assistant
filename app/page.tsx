@@ -7,6 +7,8 @@ export default function Home() {
   const [temperature, setTemperature] = useState(0.7);
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [password, setPassword] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,6 +40,54 @@ export default function Home() {
       setLoading(false);
     }
   };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('/api/auth', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password }),
+      });
+
+      if (response.ok) {
+        setIsAuthenticated(true);
+      } else {
+        alert('密码错误');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('验证失败');
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="max-w-md mx-auto mt-20 p-6">
+        <h1 className="text-2xl font-bold mb-6">访问验证</h1>
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <label className="block mb-2">请输入访问密码</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-2 border rounded-md"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600"
+          >
+            验证
+          </button>
+        </form>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-6">
