@@ -11,18 +11,12 @@ export async function POST(request: Request) {
                 'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
             },
             body: JSON.stringify({
-                model: "gpt-3.5-turbo",
-                messages: [
-                    {
-                        role: "system",
-                        content: prompt
-                    },
-                    {
-                        role: "user",
-                        content: message
-                    }
-                ],
+                model: "claude-3-5-sonnet-20241022",
                 temperature: temperature,
+                messages: [
+                    { role: "system", content: prompt },
+                    { role: "user", content: message }
+                ],
             }),
         });
 
