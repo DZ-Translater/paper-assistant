@@ -21,6 +21,12 @@ export default function Home() {
     e.preventDefault();
     setLoading(true);
 
+    if (prompt === "" && message === "") {
+      setOutput("请输入提示词和具体内容");
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch('/api/generate', {
         method: 'POST',
@@ -28,6 +34,7 @@ export default function Home() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          password,
           prompt,
           message,
           temperature,
