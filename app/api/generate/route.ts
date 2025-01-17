@@ -11,7 +11,7 @@ export async function POST(request: Request) {
                 'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
             },
             body: JSON.stringify({
-                model: "claude-3-5-sonnet-20241022",
+                model: process.env.OPENAI_MODEL || "claude-3-5-sonnet-20241022",
                 temperature: temperature,
                 messages: [
                     { role: "system", content: prompt },
