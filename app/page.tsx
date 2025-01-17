@@ -1,5 +1,5 @@
 'use client'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
   const [prompt, setPrompt] = useState("");
@@ -9,6 +9,13 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const authStatus = localStorage.getItem('isAuthenticated');
+    if (authStatus === 'true') {
+      setIsAuthenticated(true);
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,6 +61,7 @@ export default function Home() {
 
       if (response.ok) {
         setIsAuthenticated(true);
+        localStorage.setItem('isAuthenticated', 'true');
       } else {
         alert('密码错误');
       }
@@ -61,6 +69,11 @@ export default function Home() {
       console.error('Error:', error);
       alert('验证失败');
     }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem('isAuthenticated');
   };
 
   if (!isAuthenticated) {
@@ -91,7 +104,15 @@ export default function Home() {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">AI 论文助手</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">AI 论文助手</h1>
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600"
+        >
+          退出登录
+        </button>
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
