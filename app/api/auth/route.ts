@@ -12,7 +12,7 @@ export async function POST(request: Request) {
                 { status: 401 }
             );
         }
-    } catch (error) {
+    } catch {
         return NextResponse.json(
             { error: '验证失败' },
             { status: 500 }
